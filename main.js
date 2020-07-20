@@ -33,11 +33,11 @@ $("#myList").change(function() {
         data.forEach(element => {
             let image = new Image(element);
 
-           
+            if(element.keyword==selectedText.toLowerCase()){  
 
                         image.render();
 
-            
+            }
         }
         );
     });
