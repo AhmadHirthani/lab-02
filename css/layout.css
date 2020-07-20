@@ -1,0 +1,11 @@
+#myList{
+    border-radius: 10px;
+    background-color: deepskyblue;
+    color: red;
+    width: 200px;
+    height: 30px;
+    font-size: 20px;
+}
+#cardContainer{
+    margin: auto;
+}
