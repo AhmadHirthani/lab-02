@@ -1,4 +1,4 @@
-#myList{
+#myList {
     border-radius: 10px;
     background-color: deepskyblue;
     color: red;
@@ -6,6 +6,20 @@
     height: 30px;
     font-size: 20px;
 }
-#cardContainer{
+
+#cardContainer {
     margin: auto;
+}
+
+#mainHeader {
+    padding-top: 20px;
+    padding-bottom: 5px;
+    font-size: 30px;
+    font-weight: bold;
+    color: deeppink;
+}
+
+#myFooter {
+    padding-top: 20px;
+    font-size: 20px;
 }
