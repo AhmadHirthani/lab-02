@@ -1,82 +1,75 @@
-let imagesArray = [];
+function Image(image_url, title, description, keyword, horns){
+  this.image_url = image_url;
+  this.title = title;
+  this.description = description;
+  this.keyword = keyword;
+  this.horns = horns;
+  Image.Array.push(this);
+}
 
-function Image(image) {
-    this.image_url = image.image_url;
-    this.title = image.title;
-    this.description = image.description;
-    this.keyword = image.keyword;
-    this.horns = image.horns;
-    // imagesArray.push(this);
-    // localStorage.setItem('imagesArray', JSON.stringify(imagesArray));
+Image.Array = [];
+
+
+
+
+Image.prototype.toHtml = function () {
+let mustachTemplate = $("#image-template").html();
+let newObject = Mustache.render(mustachTemplate, this);
+$("#divContainer").append(newObject);
 }
 
 
 
+const keywordSet = new Set();
 
-$("#myList").change(function() {
-    $('#cardContainer').html('');
+const dataSource = window.location.href.endsWith("index.html") ? "data/page-1.json" : "data/page-2.json"
 
-    let section = $('#photo-template').clone();
-    $('#container').empty();
-    //section.find('img').serAttr('src','');
-    $('#container').append(section);
+// load data
+$.get(dataSource)
+.then((data) => {
+  data.forEach(({ image_url, title, description, keyword, horns }) => {
+    const image = new Image(image_url, title, description, keyword, horns);
+//    image.render();
+    image.toHtml();
+    keywordSet.add(keyword);
+  });
+}).then(() => {
+  // remove the template after render all of items
+  $("#template").remove();
+}).then(() => {
+  // render options set
+  keywordSet.forEach((keyword) => {
+    $("#filter").append(`<option>${keyword}</option>`)
+  })
+})
+
+// event listener
+$("#filter").change((option) => {
+  const selectedKeyword = option.target.value;
+  if (selectedKeyword !== "default") {
+    // hide all elements
+    $(".Image").hide();
+    $(`.${selectedKeyword}`).show();
+  } else {
+    $(".Image").show();
+  }
+})
 
 
-  
-            //location.reload(true);
- 
-
-
-    var selectedText = $(this).find(':selected').text();
-    console.log('selectedText: ',selectedText);
-    $.get('data/page-1.json').then(data => {
-        data.forEach(element => {
-            let image = new Image(element);
-
-            if(element.keyword==selectedText.toLowerCase()){  
-
-                        image.render();
-
-            }
-        }
-        );
+$("#horons").change((option) => {
+  const selectedSort = option.target.value; // can be title or horons
+  if (selectedSort === "title"){
+    Image.Array.sort((a, b) => {
+      return a.title.localeCompare(b.title);
     });
-});
+  } else if (selectedSort === "horns") {
+    Image.Array.sort((a, b) => {
+      return a.horns - b.horns;
+    });
+  }
 
-
-
-
-
-
-
-
-
-
-$("button").click(function () {
-   
-});
-
-
-
-Image.prototype.render = function () {
-    let section = $('#photo-template').clone();
-    let img = section.children('img');
-    let title=section.children('h2');
-    let header=section.children('p');
-
-    section.attr('id','newImage');
-
-    img.attr("src", this.image_url);
-    title.text(this.title);
-    header.text(this.description);
-
-  
-    
-    $('#cardContainer').append(section);
-    $('#clonedContainer').hide();
-
-
-}
-
-
-
+  $("#divContainer").html("");
+  Image.Array.forEach((image) => {
+    image.toHtml();
+  })
+})

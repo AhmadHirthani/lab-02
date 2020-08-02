@@ -23,3 +23,15 @@
     padding-top: 20px;
     font-size: 20px;
 }
+#divContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: stretch;
+    flex-wrap: wrap;
+  }
+  #template{
+      width: 300px;
+      height: 300px;
+      margin: 20px;
+      padding: 20px;
+  }
